@@ -22,3 +22,13 @@ sudo apt-get install gir1.2-gst-rtsp-server-1.0
 colcon build
 source install/setup.bash
 ```
+
+---
+
+### **日誌記錄**
+
+| 日期        | 更新內容                       | 分支 (Branch)  |
+|------------|--------------------------------|----------------|
+| 2025/03/20 | 起飛時機頭向東                  | main           |
+
+---
