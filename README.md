@@ -22,3 +22,8 @@ sudo apt-get install gir1.2-gst-rtsp-server-1.0
 colcon build
 source install/setup.bash
 ```
+
+# 更新日誌
+| 日期       | 更新內容                                                      | 分支 (Branch) |
+| ---------- | ----------------------------------------------------------- | ------------- |
+| 2025/04/24 | 起飛後UAV直接前往第一個起飛後UAV直接前往第一個點點                                       | v2           |

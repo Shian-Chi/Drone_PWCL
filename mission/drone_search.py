@@ -487,14 +487,14 @@ def check_arm(sub : DroneSubscribeNode, srv : DroneClientNode):
         print("check arm done")
         return True
 
-def takeoff_global(pub : DronePublishNode, sub : DroneSubscribeNode, srv : DroneClientNode, rel_alt : float):
+def takeoff_global(pub : DronePublishNode, sub : DroneSubscribeNode, srv : DroneClientNode, rel_alt : float, latitude, longitude):
     data = GlobalPositionTarget()
     data.coordinate_frame = 6 #FRAME_GLOBAL_REL_ALT 
     data.type_mask = 0
     data.velocity.x = 0.25
     data.velocity.y = 0.25
-    current_latitude = sub.latitude
-    current_longitude = sub.longitude
+    current_latitude = latitude #sub.latitude
+    current_longitude = longitude#sub.longitude
     data.latitude= current_latitude
     print(current_latitude)
     data.longitude = current_longitude
@@ -561,7 +561,7 @@ if __name__ == '__main__':
     #global posLocal
 
     freq = 50 #publish發佈頻率
-    takeoffAltitude = 10.0 #無人機起飛高度
+    takeoffAltitude = 30.0 #無人機起飛高度
 
     rclpy.init()
 
@@ -587,7 +587,7 @@ if __name__ == '__main__':
             
             origin_latitude = droneSub.latitude
             origin_longitude = droneSub.longitude
-            takeoff_global(dronePub, droneSub, droneCli, takeoffAltitude)
+            takeoff_global(dronePub, droneSub, droneCli, drone_point[0][1], drone_point[0][2], drone_point[0][3])
             temp_status = False
             
             while True:
@@ -606,13 +606,13 @@ if __name__ == '__main__':
                     print("轉向當前前進方位角")
                     bearing = calculate_bearing(lat1, lon1, lat2, lon2)
                     print(bearing)
-                    fly_to_global(dronePub, droneSub, droneCli,origin_latitude, origin_longitude, takeoffAltitude, bearing, origin_latitude, origin_longitude)
+                    fly_to_global(dronePub, droneSub, droneCli,drone_point[0][2], drone_point[0][3], drone_point[0][1], bearing, origin_latitude, origin_longitude)
                     print("轉向前進方位角完成")
 
                     #當按下搜尋開始
                     for row in range(len(drone_point)):
                         if row == 0:
-                            print("first point")
+                            '''print("first point")
                             fly_to_global(dronePub, droneSub, droneCli, 
                             drone_point[row][2], drone_point[row][3], drone_point[row][1], 0.0, origin_latitude, origin_longitude)
                             if droneSub.yolo_detect_status == True:
@@ -622,7 +622,7 @@ if __name__ == '__main__':
                                 print("land test1")
                                 droneState.droneState = 0
                                 temp_status = True
-                                break
+                                break'''
                             
                         elif (row > 0) and (row+1 < point_len) :
                             print("new point")
