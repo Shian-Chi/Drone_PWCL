@@ -487,14 +487,14 @@ def check_arm(sub : DroneSubscribeNode, srv : DroneClientNode):
         print("check arm done")
         return True
 
-def takeoff_global(pub : DronePublishNode, sub : DroneSubscribeNode, srv : DroneClientNode, rel_alt : float, latitude, longitude):
+def takeoff_global(pub : DronePublishNode, sub : DroneSubscribeNode, srv : DroneClientNode, rel_alt : float):
     data = GlobalPositionTarget()
     data.coordinate_frame = 6 #FRAME_GLOBAL_REL_ALT 
     data.type_mask = 0
     data.velocity.x = 0.25
     data.velocity.y = 0.25
-    current_latitude = latitude #sub.latitude
-    current_longitude = longitude#sub.longitude
+    current_latitude = sub.latitude
+    current_longitude = sub.longitude
     data.latitude= current_latitude
     print(current_latitude)
     data.longitude = current_longitude
@@ -510,10 +510,10 @@ def takeoff_global(pub : DronePublishNode, sub : DroneSubscribeNode, srv : Drone
     
     srv.requestSetMode("OFFBOARD")
 
-    '''while ((sub.get_altitude()) <= (rel_alt- 1)):
-    print(sub.get_altitude())
+    while ((sub.get_altitude()) <= (rel_alt- 5)):
+        print(sub.get_altitude())
         time.sleep(1/50)
-    print('takeoff complete')'''
+    print('takeoff complete')
 
 def calculate_bearing(lat1, lon1, lat2, lon2):
     '''R = 6371  # 地球半徑，單位為公里
@@ -587,7 +587,9 @@ if __name__ == '__main__':
             
             origin_latitude = droneSub.latitude
             origin_longitude = droneSub.longitude
-            takeoff_global(dronePub, droneSub, droneCli, drone_point[0][1], drone_point[0][2], drone_point[0][3])
+            takeoff_global(dronePub, droneSub, droneCli, drone_point[0][1])
+            fly_to_global(dronePub, droneSub, droneCli, 
+                            drone_point[0][2], drone_point[0][3], drone_point[0][1], 0.0, origin_latitude, origin_longitude)
             temp_status = False
             
             while True:
